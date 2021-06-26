@@ -59,7 +59,12 @@ export class User{
     }
 
     static toUserModel(user: any): User {
-        return new User(user.id, user.name, user.email, user.password, User.stringToUserRole(user.role));
+        return new User(
+            user.id, 
+            user.name, 
+            user.email, 
+            user.password, 
+            User.stringToUserRole(user.role));
       }
 
 
