@@ -1,4 +1,6 @@
+import { BaseError } from "../error/BaseError";
 import { Show, ShowOutputDTO, WeekDay } from "../model/Show";
+import { BandDatabase } from "./BandDatabase";
 import { BaseDatabase } from "./BaseDatabase";
 
 export class ShowDatabase extends BaseDatabase {
@@ -20,9 +22,9 @@ export class ShowDatabase extends BaseDatabase {
     };
 
     public async getShowByTime(
+        weekDay: WeekDay,
         start_time: number, 
-        end_time: number,
-        weekDay: WeekDay
+        end_time: number
     ): Promise<ShowOutputDTO[]> {
 
         const shows = await this.getConnection()
@@ -40,7 +42,37 @@ export class ShowDatabase extends BaseDatabase {
                 week_day: show.weekDay
             }
         })
-
     };
 
-};
+    public async getShowsByDay(weekDay: WeekDay): Promise<ShowOutputDTO[]> {
+        const shows = await this.getConnection().raw(`
+            SELECT show.id as id,
+            band.id as bandId,
+            band.name as bandName,
+            show.start_time as startTime,
+            show.end_time as endTime,
+            show.week_day as weekDay,
+            band.music_genre as mainGenre,
+            FROM ${ShowDatabase.TABLE_NAME} show
+            LEFT JOIN ${BandDatabase.TABLE_NAME} band ON band.id = show.band_id
+            WHERE show.week_day = "${weekDay}"
+            ORDER BY startTime ASC
+        `)
+        
+
+        if(!shows.length) {
+            throw new BaseError(`Unable to found show at ${weekDay}`, 400)
+        }
+    
+        return shows[0].map((data: any) => ({
+            id: data.id,
+            bandId: data.bandId,
+            startTime: data.startTime,
+            endTime: data.endTime,
+            weekDay: data.weekDay,
+            mainGenre: data.mainGenre,
+        })
+        )
+    };
+
+}

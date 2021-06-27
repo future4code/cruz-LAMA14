@@ -42,9 +42,9 @@ export class ShowBusiness {
         }
 
         const seeShows = await this.showDatabase.getShowByTime(
-            show.start_time,
+            show.weekDay,
             show.end_time,
-            show.weekDay
+            show.start_time            
         );
 
         if(seeShows.length) {
@@ -59,4 +59,14 @@ export class ShowBusiness {
         )
 
     };
+
+    async getShowByDay(weekDay: WeekDay) {
+
+        if(!weekDay) {
+            throw new BaseError("Invalid input value", 400)
+        }
+
+        const shows = await this.showDatabase.getShowsByDay(weekDay)
+        return {result: shows}
+    }
 }
