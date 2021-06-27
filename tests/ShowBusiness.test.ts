@@ -1,15 +1,15 @@
-import { UserBusiness } from "../src/business/UserBusiness"
-import { UserDatabase } from "../src/data/UserDatabase"
+import { ShowBusiness } from "../src/business/ShowBusiness"
+import { ShowDatabase } from "../src/data/ShowDatabase"
 
 import hashGeneratorMock from "./mocks/hashGeneratorMock"
 import idGeneratorMock from "./mocks/idGeneratorMock"
 import tokenGeneratorMock from "./mocks/tokenGeneratorMock"
-import userDatabaseMock from "./mocks/UserDatabaseMock"
+import showDatabaseMock from "./mocks/ShowDatabaseMock"
 
-const userBusinessMock = new UserBusiness(
+const showBusinessMock = new ShowBusiness(
   idGeneratorMock,
   hashGeneratorMock,
-  userDatabaseMock as UserDatabase,
+  showDatabaseMock as ShowDatabase,
   tokenGeneratorMock
 )
 

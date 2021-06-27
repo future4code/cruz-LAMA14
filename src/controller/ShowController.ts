@@ -18,7 +18,7 @@ export class ShowController {
                 weekDay,
                 band_id: req.body.band_id,
                 start_time: req.body.start_time,
-                end_time: req.body.end_time
+                end_time: req.body.end_time,
             }
 
             const showBusiness = new ShowBusiness(
@@ -37,4 +37,25 @@ export class ShowController {
 
         await BaseDatabase.destroyConnection();
     };
+
+    async getShowByDay(req: Request, res: Response) {
+        try {
+            const weekDay = Show.toWeekDayEnum(req.query.weekday as string);
+            const showBusiness = new ShowBusiness(
+                new ShowDatabase,
+                new BandDatabase,
+                new IdGenerator,
+                new Authenticator
+            )
+
+            const shows = await showBusiness.getShowByDay(weekDay);
+
+            res.status(200).send({shows})
+
+        } catch (error) {
+            res.status(error.sqlMessage || 400).send({message: error.message})
+        }
+    };
+
+    
 }

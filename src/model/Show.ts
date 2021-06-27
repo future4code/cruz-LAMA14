@@ -100,11 +100,13 @@ export interface ShowOutputDTO{
     start_time: moment.Moment;
     end_time: number;
     band_id: string;
+    mainGenre?: string;
+    bandName?: string;
 }
 
 export interface ShowInputDTO{
-    weekDay: WeekDay;
-    start_time: number;
-    end_time: number;
-    band_id: string;
+    weekDay: WeekDay
+    start_time: number
+    end_time: number
+    band_id: string
 }
